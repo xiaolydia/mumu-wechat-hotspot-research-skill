@@ -8,7 +8,11 @@
 
 直接下载 zip：
 
-https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill/raw/main/mumu-wechat-hotspot-research-skill.zip
+https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill/releases/latest/download/mumu-wechat-hotspot-research-skill.zip
+
+也可以查看仓库源码和说明：
+
+https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill
 
 ## 安装
 
