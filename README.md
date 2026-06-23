@@ -1,18 +1,30 @@
 # 木木公众号热点研究 Skill
 
-这是「AI 内容工厂」课程配套的 Codex Skill，用来通过大加拉公众号文章关键词搜索接口抓取热点文章，并生成按分数排序的 Markdown / HTML 报告。
+这是「AI 内容工厂」课程配套的 Codex Skill，用来把一个内容主题转化为结构化的公众号热点研究报告。它通过大加拉公众号文章关键词搜索接口抓取相关文章，自动完成文章去重、正文清洗、主题相关度判断、落地价值评分、技术实践信号识别和传播热度评估，并生成可分享的 Markdown / HTML 报告。
 
-本版本先写死为「公众号文章关键词搜索」接口，不包含视频号接口。
+这个 Skill 适合内容创作者、课程研发者、运营人员和研究型写作者使用：当你想知道某个主题最近有哪些公众号文章值得关注、哪些文章真正有案例和方法、哪些文章只是泛泛而谈时，可以让 Codex 使用这个 Skill 自动抓取相关文章，并按统一标准筛选、评分和排序。
+
+## 它能帮你做什么
+
+- 追踪某个公众号选题方向的近期热点文章。
+- 研究一个行业、工具、技术或方法论在公众号里的讨论情况。
+- 为公众号、小红书、课程、直播或社群内容寻找可拆解的案例。
+- 观察竞品账号或同领域创作者正在写什么。
+- 从大量搜索结果里筛出真正有实践价值的文章。
+- 把高分文章沉淀进自己的选题库、案例库和素材库。
+- 为「AI 内容工厂」式的选题生产线提供上游信息源。
+
+典型主题包括 AI Agent、MCP、Claude Code、Codex Skill、自动化工作流、个人 IP、公众号写作、内容生产、知识库搭建、AI 工具测评、行业观察、商业案例和课程选题等。
 
 ## 下载
 
-直接下载 zip：
+推荐下载这个文件：
 
-https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill/releases/latest/download/mumu-wechat-hotspot-research-skill.zip
+https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill/raw/main/wechat-hotspot-research-skill.zip
 
-也可以查看仓库源码和说明：
+为了兼容旧文件名，仓库里也保留同内容的下载包：
 
-https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill
+https://github.com/xiaolydia/mumu-wechat-hotspot-research-skill/raw/main/mumu-wechat-hotspot-research-skill.zip
 
 ## 安装
 
@@ -26,13 +38,13 @@ cd ~/Downloads
 
 ```zsh
 mkdir -p ~/.agents/skills
-unzip -o mumu-wechat-hotspot-research-skill.zip -d ~/.agents/skills
+unzip -o wechat-hotspot-research-skill.zip -d ~/.agents/skills
 ```
 
 确认安装成功：
 
 ```zsh
-ls ~/.agents/skills/mumu-wechat-hotspot-research/SKILL.md
+ls ~/.agents/skills/wechat-hotspot-research/SKILL.md
 ```
 
 然后重启 Codex，让新 Skill 生效。
@@ -41,31 +53,13 @@ ls ~/.agents/skills/mumu-wechat-hotspot-research/SKILL.md
 
 这个 Skill 需要大加拉 API Key。不要把 key 写进课程文档、GitHub、聊天记录或脚本里，推荐放到本机环境变量。
 
-打开配置文件：
-
-```zsh
-nano ~/.zshrc
-```
-
-在文件最后加一行：
+临时使用一次：
 
 ```zsh
 export DAJIALA_API_KEY="你的大加拉key"
 ```
 
-保存退出：
-
-```text
-control + O
-回车
-control + X
-```
-
-让配置立即生效：
-
-```zsh
-source ~/.zshrc
-```
+长期自用：可以把这一行加到 `~/.zshrc`，以后每次打开终端都会自动加载。
 
 验证是否配置成功：
 
@@ -80,30 +74,43 @@ echo ${DAJIALA_API_KEY:+已设置}
 在 Codex 里可以这样说：
 
 ```text
-使用 $mumu-wechat-hotspot-research 抓取 Codex 相关的 20 条公众号文章，并生成热点报告。
+使用 $wechat-hotspot-research 抓取 AI Agent 工作流相关的公众号热点文章，并生成按分数排序的报告。
 ```
 
 也可以换成自己的主题：
 
 ```text
-使用 $mumu-wechat-hotspot-research 抓取 AI 内容工厂 相关的公众号热点文章，最近 30 天，最多 20 条。
+使用 $wechat-hotspot-research 抓取 AI 内容工厂相关的公众号热点文章，最近 7 天，最多 30 条。
 ```
 
 ## 输出文件
 
 每次运行会生成一个带时间戳的目录，里面通常有：
 
-- `report.md`：Markdown 版热点报告
-- `report.html`：可分享的 HTML 报告
-- `selected_articles.json`：入选文章结构化数据
-- `scored_articles.json`：全部文章评分数据
-- `run_meta.json`：运行参数、扣费和余额等信息
+- `report.html`：可直接打开和分享的可视化热点报告。
+- `report.md`：适合复制到 Obsidian、飞书文档或 GitHub 的 Markdown 报告。
+- `selected_articles.json`：达到评分阈值的入选文章，适合继续进入选题库或自动化流程。
+- `scored_articles.json`：所有抓取结果的完整评分表。
+- `raw_responses.json`：接口原始响应，已移除 API Key。
+- `run_meta.json`：本次运行的参数、抓取数量、入选数量、扣费字段和生成时间。
 
-报告只保留标题、公众号、日期、数据指标、评分、短摘录和原文链接，不会复制全文，也不会保存 API Key。
+报告只展示标题、公众号、日期、数据指标、评分、入选理由、原文链接和短摘录，不复制全文，也不会保存 API Key。
+
+## 评分逻辑
+
+默认总分 100 分：
+
+- 主题相关度：35 分。
+- 实际落地价值：25 分。
+- 技术实践信号：20 分。
+- 可复用资产：15 分。
+- 传播热度：5 分。
+
+评分的目的不是绝对判断文章好坏，而是帮助内容研究时快速排序：优先看那些和主题强相关、同时有真实场景和可复用方法的文章。
 
 ## 注意事项
 
-- 接口按返回条数扣费，第一次建议只抓 20 条以内。
-- 如果没有结果，可以放宽关键词或把时间范围调大。
-- 如果 key 不小心暴露，去大加拉后台重新生成一个新的。
-- 本版本只支持公众号文章关键词搜索；视频号接口后续可以单独做新版本。
+- 接口按返回条数扣费，第一次建议使用保守参数运行。
+- 如果没有结果，可以放宽关键词、减少限制词或扩大时间范围。
+- 如果结果太泛，可以增加排除词，或把主题关键词写得更具体。
+- 如果 key 不小心暴露，请及时去大加拉后台重新生成。

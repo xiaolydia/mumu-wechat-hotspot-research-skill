@@ -1,4 +1,0 @@
-interface:
-  display_name: "木木公众号热点研究"
-  short_description: "抓取公众号热点文章并生成评分报告"
-  default_prompt: "使用 $mumu-wechat-hotspot-research 抓取一个主题的公众号热点文章，并生成按分数排序的报告。"
